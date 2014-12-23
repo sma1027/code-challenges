@@ -22,7 +22,7 @@ class Game
     puts <<-INSTRUCTIONS.gsub(/^\s{6}/,"") 
       Let's play tic-tac-toe!!
       
-      Shown below is the tic-tac-toe board. Player 1 is X and Player 2 is O. To play, enter the position you want to place your marker as indicated by the numbers.
+      Shown below is the tic-tac-toe board. The 1st player's marker is X and 2nd player's marker is O. To play, enter the position you want to place your marker as indicated by the numbers.
     INSTRUCTIONS
 
     show_board
@@ -44,14 +44,19 @@ class Game
     @selection = gets.chomp.to_i
 
     if selection_valid?(@selection)
-      case @selection 
+      case @selection
+      when 1
+        game_type = 'human vs human'
       when 2
+        game_type = 'human vs computer'
         @player2 = 'Computer'
       when 3
+        game_type = 'computer vs human'
         @player1 = 'Computer'
       end
       
-      puts "You chose game type #{@selection} - #{@player1} vs #{@player2}"
+      puts "You selected game type #{@selection} - #{game_type}."
+      puts "#{@player1} (X) vs #{@player2} (O)"
       puts "Let the game begin!!!"
       
       show_board
@@ -103,92 +108,63 @@ class Game
       end
 
       show_board
-      @turn += 1
     end
   end
 
   def human_play(player)
     print "#{player}, please enter a number where you want to place your marker: "
     @position = gets.chomp.to_i
+    
     if position_valid?(@position)
       @board[@position - 1] = "#{@marker}" 
       print "#{player} puts it on #{@position}"
+      @turn += 1
     else
       puts 'Invalid position. Please try again.'
+      @turn += 0
     end 
   end
 
   def position_valid?(position)
     true if position >= 1 && position <= 9 && @board[position-1] == " "
-  end
-      
-  # def human_vs_computer
-  #   while !win?
-  #     if @turn % 2 == 0
-  #       if @turn == 0
-  #         @position = rand(10)
-  #       else
-  #         computer_play
-  #       end
-  #       @board[@position] = 'X'
-  #       print "#{@player2} puts it on #{@position+1}"
-  #     else
-  #       human_play
-  #       if position_valid?(@position)
-  #         @board[@position - 1] = 'O' 
-  #         print "#{@player1} puts it on #{@position}"
-  #       else
-  #         puts 'Invalid position. Please try again.'
-  #       end 
-  #     end
-  #     show_board
-  #     @turn += 1
-  #   end
-  # end  
+  end 
 
   def computer_play
-    WINS.each do |win|
-      if @board[win[0]] == @board[win[1]] && @board[win[2]] == " "
-        @position = win[2]
-      elsif @board[win[0]] == @board[win[2]] && @board[win[1]] == " "
-        @position = win[1]
-      elsif @board[win[1]] == @board[win[2]] && @board[win[0]] == " "
-        @position = win[0]
+    if @turn == 1 || @turn == 2
+      @position = rand(10)
+    else
+      #find two things in a line that are same
+
+      # indices = @board.each_index.select{|i| @board[i] == "#{@marker}"}
+      # if indices.count == 2
+      #   # line = []
+      #   WINS.each do |win|
+      #     if win.include?(indices.first) && win.include?(indices.last)
+      #       @position = win - [indices.first] - [indices.last]
+      #     end
+      #   end
+      # end
+
+      WINS.each do |win|
+        if @board[win[0]] == @board[win[1]] && @board[win[2]] == " "
+          @position = win[2]
+        elsif @board[win[0]] == @board[win[2]] && @board[win[1]] == " "
+          @position = win[1]
+        elsif @board[win[1]] == @board[win[2]] && @board[win[0]] == " "
+          @position = win[0]
+        end
       end
     end
+
     @board[@position] = "#{@marker}"
     print "Computer puts it on #{@position + 1}"
+    @turn += 1
   end
-
-  # def human_vs_human
-  #   @player = @turn % 2 + 1
-
-  #   while !win?
-  #     print "Player #{@player}, please enter a number where you want to place your marker: "
-  #     @marker = gets.chomp.to_i
-
-  #     if marker_valid?(@marker)
-  #       print "Player #{@player} placed your marker on position #{@marker}"
-        
-  #       if @turn % 2 == 0
-  #         @board[@marker - 1] = 'X'
-  #       elsif @turn % 2 == 1
-  #         @board[@marker - 1] = 'O'
-  #       end
-
-  #       show_board
-  #       @turn += 1
-  #       @player = @turn % 2 + 1
-  #     else
-  #       puts 'Invalid position. Please try again.'
-  #     end
-  #   end
-  # end
 
   def win?
     WINS.each do |win|
       if @board[win[0]] != " " && @board[win[0]] == @board[win[1]] && @board[win[1]] == @board[win[2]]
-        puts "Game Over!"
+        puts "Game Over! #{@marker} wins"
         return true
       end
     end
