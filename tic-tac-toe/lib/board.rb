@@ -3,7 +3,6 @@ class Board
 
   def initialize
     @board = (1..9).to_a
-    # show_board
   end
 
   def show_board

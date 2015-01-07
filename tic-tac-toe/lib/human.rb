@@ -1,8 +1,8 @@
-class Computer
+class Human
   attr_reader :marker, :name
-  
+
   def initialize(marker)
     @marker = marker
-    @name = 'computer'
+    @name = 'human'
   end
 end

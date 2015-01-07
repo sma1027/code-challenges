@@ -1,12 +1,13 @@
 class Game
-  attr_accessor :board
+  attr_accessor :board, :player1, :player2
 
   def initialize
     @board = Board.new
-    instructions
+    @turn = 0
+    print_instructions
   end
 
-  def instructions
+  def print_instructions
     puts <<-INSTRUCTIONS.gsub(/^\s{6}/,"") 
       TIC-TAC-TOE
       Let's play tic-tac-toe!!
@@ -26,6 +27,7 @@ class Game
     game_type
 
     get_selection
+    play(@player1, @player2)
   end
 
   def get_selection
@@ -35,14 +37,18 @@ class Game
     if selection_valid?(@selection)
       case @selection
       when 1
-        game_type = 'human vs human'
+        @player1 = Human.new('X')
+        @player2 = Human.new('O')
       when 2
-        game_type = 'human vs computer'
+        @player1 = Human.new('X')
+        @player2 = Computer.new('O')
       when 3
-        game_type = 'computer vs human'
+        @player1 = Computer.new('X')
+        @player2 = Human.new('O')
       end
       
-      puts "You selected game type #{@selection} - #{game_type}."
+      puts "You selected choice #{@selection} - #{@player1.name} vs #{@player2.name}"
+
       puts "Let the game begin!!!"
       
       @board.show_board
@@ -54,5 +60,9 @@ class Game
 
   def selection_valid?(selection)
     true if selection == 1 || selection == 2 || selection == 3
+  end
+
+  def play(player1, player2)
+    
   end
 end
