@@ -3,7 +3,6 @@ class Game
 
   def initialize
     @board = Board.new
-    @turn = 0
     print_instructions
   end
 
@@ -64,10 +63,14 @@ class Game
 
   def play(player1, player2)
     while !@board.win? && @board.free_space?
-      position = @player1.move
-      # # binding.pry
-      # @board.take_position(position)
-      @turn += 1
+      if @board.turn % 2 == 0
+        position = @player1.move
+        @board.take_position(position, @player1.marker)
+      elsif @board.turn % 2 == 1
+        position = @player2.move
+        @board.take_position(position, @player2.marker)
+      end
+      @board.show_board
     end
   end
 end

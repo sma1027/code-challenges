@@ -1,5 +1,5 @@
 class Board
-  attr_accessor :board
+  attr_accessor :board, :turn
 
   WINS = [[[0,0], [0,1], [0,2]], 
             [[1,0], [1,1], [1,2]], 
@@ -12,6 +12,7 @@ class Board
 
   def initialize
     @board = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+    @turn = 0
   end
 
   def show_board
@@ -25,11 +26,6 @@ class Board
 
     board
   end
-
-  # def reset
-  #   @board = []
-  #   9.times{ @board << ' ' }
-  # end
 
   def win?
     WINS.each do |win|
@@ -72,8 +68,19 @@ class Board
     coords
   end
 
-  def take_position(position)
-    find_position(position)
-    get_free_spaces
+  def position_free?(position)
+    true if get_free_spaces.include?(find_position(position))
   end
+
+  def take_position(position, marker)
+    if position_free?(position)
+      coords = find_position(position)
+      @board[coords.first][coords.last] = marker
+      @turn += 1
+    else
+      @turn += 0
+      puts 'Invalid position. Please try again'
+    end 
+  end
+
 end
