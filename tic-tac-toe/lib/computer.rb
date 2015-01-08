@@ -5,4 +5,5 @@ class Computer
     @marker = marker
     @name = 'computer'
   end
+  
 end

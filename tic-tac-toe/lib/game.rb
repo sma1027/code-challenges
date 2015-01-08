@@ -16,7 +16,7 @@ class Game
     INSTRUCTIONS
 
     @board.show_board
-    @board.reset
+    # @board.reset
 
     puts <<-game_type.gsub(/^\s{6}/,"")  
       To begin, please select which game you want to play
@@ -37,14 +37,14 @@ class Game
     if selection_valid?(@selection)
       case @selection
       when 1
-        @player1 = Human.new('X')
-        @player2 = Human.new('O')
+        @player1 = Human.new('x')
+        @player2 = Human.new('o')
       when 2
-        @player1 = Human.new('X')
-        @player2 = Computer.new('O')
+        @player1 = Human.new('x')
+        @player2 = Computer.new('o')
       when 3
-        @player1 = Computer.new('X')
-        @player2 = Human.new('O')
+        @player1 = Computer.new('x')
+        @player2 = Human.new('o')
       end
       
       puts "You selected choice #{@selection} - #{@player1.name} vs #{@player2.name}"
@@ -63,6 +63,11 @@ class Game
   end
 
   def play(player1, player2)
-    
+    while !@board.win? && @board.free_space?
+      position = @player1.move
+      # # binding.pry
+      # @board.take_position(position)
+      @turn += 1
+    end
   end
 end
