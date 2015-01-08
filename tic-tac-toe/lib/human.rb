@@ -8,7 +8,7 @@ class Human
 
   def move
     print "#{self.name}-#{self.marker} enter your position: "
-    @position = gets.chomp.to_i
+    @position = gets.chomp.to_s
   end
 
 end

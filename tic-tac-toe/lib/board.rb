@@ -11,7 +11,7 @@ class Board
             [[0,2], [1,1], [2,0]]]
 
   def initialize
-    @board = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+    @board = [['1', '2', '3'], ['4', '5', '6'], ['7', '8', '9']]
     @turn = 0
   end
 
@@ -44,7 +44,7 @@ class Board
     spaces = []
     board.each_with_index do |rows, row_index|
       rows.each_index do |index|
-        if board[row_index][index] != 'X' &&  board[row_index][index] != 'O'
+        if board[row_index][index] != 'x' &&  board[row_index][index] != 'o'
           spaces << [row_index, index]
         end
       end
@@ -80,7 +80,19 @@ class Board
     else
       @turn += 0
       puts 'Invalid position. Please try again'
-    end 
+    end
+  end
+
+  def winner?(player1, player2)
+    if self.win? == true
+      if self.turn % 2 == 0
+        puts "#{player2.name}-#{player2.marker} wins"
+      elsif self.turn % 1 == 0
+        puts "#{player1.name}-#{player1.marker} wins"
+      end
+    else
+      puts "Game over! Tied Game!"
+    end
   end
 
 end

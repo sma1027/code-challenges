@@ -27,21 +27,22 @@ class Game
 
     get_selection
     play(@player1, @player2)
+    @board.winner?(@player1, @player2)
   end
 
   def get_selection
     print "Enter your selection: "
-    @selection = gets.chomp.to_i
+    @selection = gets.chomp.to_s
 
     if selection_valid?(@selection)
       case @selection
-      when 1
+      when '1'
         @player1 = Human.new('x')
         @player2 = Human.new('o')
-      when 2
+      when '2'
         @player1 = Human.new('x')
         @player2 = Computer.new('o')
-      when 3
+      when '3'
         @player1 = Computer.new('x')
         @player2 = Human.new('o')
       end
@@ -58,7 +59,7 @@ class Game
   end
 
   def selection_valid?(selection)
-    true if selection == 1 || selection == 2 || selection == 3
+    true if selection == '1' || selection == '2' || selection == '3'
   end
 
   def play(player1, player2)
@@ -73,4 +74,5 @@ class Game
       @board.show_board
     end
   end
+
 end
