@@ -1,6 +1,15 @@
 class Computer
   attr_reader :marker, :name, :board, :opponent_marker
   
+  LINES = [[[0,0], [0,1], [0,2]], 
+            [[1,0], [1,1], [1,2]], 
+            [[2,0], [2,1], [2,2]],
+            [[0,0], [1,0], [2,0]], 
+            [[0,1], [1,1], [2,1]], 
+            [[0,2], [1,2], [2,2]],
+            [[0,0], [1,1], [2,2]], 
+            [[0,2], [1,1], [2,0]]]
+
   def initialize(marker, board)
     @marker = marker
     @name = 'computer'
@@ -16,16 +25,15 @@ class Computer
   end
 
   def move
+    return block_or_take_win? if block_or_take_win
+
+    return block_or_take_win if block_or_take_win
+
     return take_center? if take_center?
 
     return take_corner if take_corner?
 
-    binding.pry
     return play_corner if play_corner_if_empty?
-
-    if play_side? == true
-      return play_side
-    end 
   end
 
   def take_center?
@@ -35,8 +43,6 @@ class Computer
       @board.take_position(@position, marker)
       puts "#{self.name} plays position #{@position}"
       return true
-    # else
-    #   false
     end
     false
   end
@@ -58,16 +64,16 @@ class Computer
   end
 
   def take_corner
-    if @board.board.first.first == opponent_marker #&& @board.board.last.last != marker
+    if @board.board.first.first == opponent_marker
       @position = @board.board.last.last
       @board.take_position(@position, marker)
-    elsif @board.board.first.last == opponent_marker #&& @board.board.last.first != marker
+    elsif @board.board.first.last == opponent_marker
       @position = @board.board.last.first
       @board.take_position(@position, marker)
-    elsif @board.board.last.first == opponent_marker #&& @board.board.first.last != marker
+    elsif @board.board.last.first == opponent_marker
       @position = @board.board.first.last
       @board.take_position(@position, marker)
-    elsif @board.board.last.last == opponent_marker #&& @board.board.first.first != marker
+    elsif @board.board.last.last == opponent_marker
       @position = @board.board.first.first
       @board.take_position(@position, marker)
     else
@@ -100,29 +106,42 @@ class Computer
     false
   end
 
-  def play_side?
-    sides = [[0,1], [1,0], [1,2], [2,1]]
-    sides.each do |side|
-      if @board.board[side.first][side.last] != 'x' || @board.board[side.first][side.last] != 'o'
-        true
+  def block_or_take_win?
+    LINES.each do |line|
+      markers = []
+      line.each do |position|
+        markers << @board.board[position.first][position.last]
+      end
+      if markers.count(marker) == 2 || markers.count(opponent_marker) == 2
+        return true
       end
     end
     false
   end
 
-  def play_side
-    sides = [[0,1], [1,0], [1,2], [2,1]]
-    sides.each do |side|
-      if @board.board[side.first][side.last] != 'x' || @board.board[side.first][side.last] != 'o'
-        @position = @board.board[side.first][side.last]
-        @board.take_position(@position, marker)
-        true
+  def block_or_take_win
+    LINES.each do |win|
+      markers = []
+      win.each do |position|
+        markers << @board.board[position.first][position.last]
+      end
+      
+      if markers.count(marker) == 2
+        @position = (markers - [marker]).first
+        if @board.position_free?(@position)
+          @board.take_position(@position, marker)
+          puts "#{self.name} plays position #{@position}"
+          return true
+        end
+      elsif markers.count(opponent_marker) == 2
+        @position = (markers - [opponent_marker]).first
+        if @board.position_free?(@position)
+          @board.take_position(@position, marker)
+          puts "#{self.name} plays position #{@position}"
+          return true
+        end
       end
     end
     false
   end
-
-  # def block?
-  #   @board.
-  # end
 end
