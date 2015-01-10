@@ -28,7 +28,7 @@ class Computer
     return block_or_take_win? if block_or_take_win
 
     return take_center? if take_center?
-
+    
     return take_corner if take_corner?
 
     return play_corner if play_corner_if_empty?
@@ -54,7 +54,7 @@ class Computer
     }
 
     corners.each do |corner, opposite_corner|
-      if @board.board[corner.first][corner.last] == opponent_marker && @board.board[opposite_corner.first][opposite_corner.last] != marker
+      if @board.board[corner.first][corner.last] == opponent_marker && @board.board[opposite_corner.first][opposite_corner.last] != marker && @board.board[opposite_corner.first][opposite_corner.last] != opponent_marker
         return true
       end
     end
