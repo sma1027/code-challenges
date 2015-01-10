@@ -41,9 +41,9 @@ class Game
         @player2 = Human.new('o')
       when '2'
         @player1 = Human.new('x')
-        @player2 = Computer.new('o')
+        @player2 = Computer.new('o', @board)
       when '3'
-        @player1 = Computer.new('x')
+        @player1 = Computer.new('x', @board)
         @player2 = Human.new('o')
       end
       
@@ -65,11 +65,19 @@ class Game
   def play(player1, player2)
     while !@board.win? && @board.free_space?
       if @board.turn % 2 == 0
-        position = @player1.move
-        @board.take_position(position, @player1.marker)
+        if @player1.instance_of? Human
+          position = @player1.move
+          @board.take_position(position, @player1.marker)
+        else
+          @player1.move
+        end
       elsif @board.turn % 2 == 1
-        position = @player2.move
-        @board.take_position(position, @player2.marker)
+        if @player2.instance_of? Human
+          position = @player2.move
+          @board.take_position(position, @player2.marker)
+        else
+          @player2.move
+        end
       end
       @board.show_board
     end

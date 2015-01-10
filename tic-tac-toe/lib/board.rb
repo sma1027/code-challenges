@@ -10,6 +10,8 @@ class Board
             [[0,0], [1,1], [2,2]], 
             [[0,2], [1,1], [2,0]]]
 
+  CORNERS = [[0,0], [0,2], [2,0], [2,2]]
+
   def initialize
     @board = [['1', '2', '3'], ['4', '5', '6'], ['7', '8', '9']]
     @turn = 0
@@ -73,6 +75,7 @@ class Board
   end
 
   def take_position(position, marker)
+    # binding.pry
     if position_free?(position)
       coords = find_position(position)
       @board[coords.first][coords.last] = marker
