@@ -27,8 +27,6 @@ class Computer
   def move
     return block_or_take_win? if block_or_take_win
 
-    return block_or_take_win if block_or_take_win
-
     return take_center? if take_center?
 
     return take_corner if take_corner?
